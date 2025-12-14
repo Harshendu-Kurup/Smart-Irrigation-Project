@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
+import os
 import numpy as np
 import requests
 import pymongo
@@ -20,7 +21,8 @@ client = pymongo.MongoClient(MONGO_URI)
 db = client["SmartIrrigation"]
 collection = db["sensor_logs"]
 
-MODEL_PATH = r"D:\IIIT-HYD RAP\backend\irrigation_best_model.pkl"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "irrigation_best_model.pkl")
 model = joblib.load(MODEL_PATH)
 
 app = FastAPI(title="Smart Irrigation Backend")
