@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Irrigation Dashboard</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/styles.css">
+
+  <!-- Chart.js (ONLY ONCE) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<header>
+  <h1>🌱 Smart Irrigation Dashboard</h1>
+  <p>AI-powered irrigation monitoring & control</p>
+</header>
+
+<section class="cards">
+  <div class="datetime-box">
+    <span id="date">--</span>
+    <span id="time">--</span>
+  </div>
+
+  <div class="card">
+    <h3>Soil Moisture</h3>
+    <p id="soil">-- %</p>
+  </div>
+
+  <div class="card">
+    <h3>Temperature</h3>
+    <p id="temp">-- °C</p>
+  </div>
+
+  <div class="card">
+    <h3>Humidity</h3>
+    <p id="hum">-- %</p>
+  </div>
+
+  <div class="card">
+    <h3>Light</h3>
+    <p id="light">--</p>
+  </div>
+
+  <div class="card">
+    <h3>Pump Status</h3>
+    <p id="pump">--</p>
+  </div>
+
+  <div class="card">
+    <h3>Water Level</h3>
+    <p id="water">-- %</p>
+  </div>
+</section>
+
+<section class="decision-card">
+  <h2>Irrigation Decision</h2>
+  <p id="decision">--</p>
+  <p><strong>Reason:</strong> <span id="reason">--</span></p>
+  <p><strong>Last Irrigated:</strong> <span id="lastIrrigated">--</span></p>
+</section>
+
+<!-- ✅ WEATHER SECTION (NOW CLOSED PROPERLY) -->
+<section class="weather-card">
+  <h2>🌦 Weather</h2>
+
+  <div class="weather-content">
+    <div class="weather-icon" id="weatherIcon">☁</div>
+    <div>
+      <p id="weatherDesc">--</p>
+      <p>Temperature: <span id="apiTemp">--</span> °C</p>
+      <p>Humidity: <span id="apiHum">--</span> %</p>
+    </div>
+  </div>
+</section>
+
+<section class="trends">
+  <h2> System Trends</h2>
+
+  <div class="charts">
+    <div class="chart-box">
+      <canvas id="soilChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <canvas id="tempChart"></canvas>
+    </div>
+  </div>
+</section>
+
+<section class="control">
+  <h2>Manual Pump Control</h2>
+  <button onclick="pumpOn()">Pump ON</button>
+  <button onclick="pumpOff()">Pump OFF</button>
+</section>
+
+<!-- JS MUST BE LAST -->
+<script src="./js/app.js"></script>
+
+</body>
+</html>
