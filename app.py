@@ -38,10 +38,46 @@ app.add_middleware(
 
 # ================= WEATHER =================
 def get_weather():
-    url = f"https://api.openweathermap.org/data/2.5/forecast?lat={LAT}&lon={LON}&appid={API_KEY}&units=metric"
-    data = requests.get(url).json()
-    rain_3h = data["list"][0].get("rain", {}).get("3h", 0.0)
-    return rain_3h
+    try:
+        # -------- CURRENT WEATHER --------
+        current_url = (
+            f"https://api.openweathermap.org/data/2.5/weather"
+            f"?lat={LAT}&lon={LON}&appid={API_KEY}&units=metric"
+        )
+        current_res = requests.get(current_url, timeout=5)
+
+        if current_res.status_code != 200:
+            raise Exception("Current weather API failed")
+
+        current = current_res.json()
+
+        api_temp = current.get("main", {}).get("temp")
+        api_humidity = current.get("main", {}).get("humidity")
+        weather_desc = current.get("weather", [{}])[0].get("description", "unknown")
+
+        # -------- FORECAST (RAIN) --------
+        forecast_url = (
+            f"https://api.openweathermap.org/data/2.5/forecast"
+            f"?lat={LAT}&lon={LON}&appid={API_KEY}&units=metric"
+        )
+        forecast_res = requests.get(forecast_url, timeout=5)
+
+        if forecast_res.status_code != 200:
+            raise Exception("Forecast API failed")
+
+        forecast = forecast_res.json()
+
+        rain_next_3h = (
+            forecast.get("list", [{}])[0]
+            .get("rain", {})
+            .get("3h", 0.0)
+        )
+
+        return api_temp, api_humidity, weather_desc, rain_next_3h
+
+    except Exception as e:
+        print("⚠️ Weather API Error:", e)
+        return None, None, "unknown", 0.0
 
 # ================= ESP INPUT =================
 class SensorData(BaseModel):
@@ -92,7 +128,7 @@ def receive_sensor_data(sensor: SensorData):
     irrigation_needed = int(model.predict(X)[0])
 
     # ---------- Weather ----------
-    rain_next_3h = get_weather()
+    api_temp, api_humidity, weather_desc, rain_next_3h = get_weather()
 
     # ---------- Previous DB entry ----------
     last_entry = collection.find_one(sort=[("timestamp", -1)])
@@ -148,25 +184,36 @@ def receive_sensor_data(sensor: SensorData):
         time_since_irrigation = 0
 
     # ---------- Final DB record ----------
+     
     record = {
-        "timestamp": now,
-        "soil_moisture": sensor.soil_moisture,
-        "temperature": sensor.temperature,
-        "humidity": sensor.humidity,
-        "light": sensor.light,
-        "water_level": sensor.water_level,
+    "timestamp": now,
 
-        "irrigation_needed": irrigation_needed,
-        "irrigation_event": irrigation_event,
-        "last_irrigated": last_irrigated_time,
-        "time_since_irrigation": time_since_irrigation,
-        "minutes": round(minutes_gap, 2),
-        "moisture_drop_rate": round(moisture_drop_rate, 4),
+    # Sensor data
+    "soil_moisture": sensor.soil_moisture,
+    "temperature": sensor.temperature,
+    "humidity": sensor.humidity,
+    "light": sensor.light,
+    "water_level": sensor.water_level,
 
-        "rain_next_3h": rain_next_3h,
-        "decision_reason": reason,
-        "tank_alert": alert
-    }
+    # 🌦 WEATHER (THIS WAS MISSING)
+    "api_temp": api_temp,
+    "api_humidity": api_humidity,
+    "weather_desc": weather_desc,
+    "rain_next_3h": rain_next_3h,
+
+    # 🤖 Decision & irrigation
+    "irrigation_needed": irrigation_needed,
+    "irrigation_event": irrigation_event,
+    "last_irrigated": last_irrigated_time,
+    "time_since_irrigation": time_since_irrigation,
+    "minutes": round(minutes_gap, 2),
+    "moisture_drop_rate": round(moisture_drop_rate, 4),
+
+    "decision_reason": reason,
+    "tank_alert": alert
+}
+
+
 
     collection.insert_one(record)
 
