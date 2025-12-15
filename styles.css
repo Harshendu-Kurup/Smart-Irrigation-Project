@@ -1,0 +1,149 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f9fff9;
+  color: #2c3e2d;
+}
+
+header {
+  background: #2e7d32;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin-bottom: 10px;
+  color: #388e3c;
+}
+
+.decision, .control {
+  background: white;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.alert {
+  color: red;
+  font-weight: bold;
+}
+
+button {
+  background: #43a047;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  margin: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #2e7d32;
+}
+
+input {
+  padding: 8px;
+  margin-right: 10px;
+}
+
+footer {
+  text-align: center;
+  padding: 10px;
+  color: #777;
+}
+
+.datetime-box {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  text-align: right;
+}
+
+.decision-card {
+  margin: 30px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #e8f5e9;
+  border-left: 6px solid #2e7d32;
+}
+
+.weather-card {
+  margin: 30px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #f1f8e9;
+  border-left: 6px solid #689f38;
+}
+
+.weather-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.weather-icon {
+  font-size: 48px;
+}
+
+.graph-section {
+  margin: 30px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+}
+canvas {
+  margin-top: 30px;
+}
+
+canvas {
+  width: 100% !important;
+  height: 300px !important;
+  margin-top: 20px;
+}
+
+.trends {
+  margin: 40px;
+}
+
+.trends h2 {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.chart-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  height: 300px;
+}
